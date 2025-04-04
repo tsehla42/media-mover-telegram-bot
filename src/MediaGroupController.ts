@@ -27,13 +27,13 @@ export class MediaGroupController {
   }
 
   public async sendMediaGroup(ctx: Context) {
-    const inputMediaPhoto = this.createMediaGroupFromIds(this.photoGroupIds, "photo") as InputMediaPhoto[];
-    const inputMediaVideo = this.createMediaGroupFromIds(this.videoGroupIds, "video") as InputMediaVideo[];
+    const inputMediaPhotos = this.createMediaGroupFromIds(this.photoGroupIds, "photo") as InputMediaPhoto[];
+    const inputMediaVideos = this.createMediaGroupFromIds(this.videoGroupIds, "video") as InputMediaVideo[];
     if (!!this.photoGroupIds.length) {
-      await ctx.api.sendMediaGroup(PHOTO_CHAT_ID, inputMediaPhoto);
+      await ctx.api.sendMediaGroup(PHOTO_CHAT_ID, inputMediaPhotos);
     }
     if (!!this.videoGroupIds.length) {
-      await ctx.api.sendMediaGroup(VIDEO_CHAT_ID, inputMediaVideo);
+      await ctx.api.sendMediaGroup(VIDEO_CHAT_ID, inputMediaVideos);
     }
   }
 
