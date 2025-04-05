@@ -1,4 +1,9 @@
 {
+  "scripts": {
+    "compile": "npx tsc",
+    "bot": "node src/bot.js",
+    "dev": "npm run compile && npm run bot"
+  },
   "devDependencies": {
     "@types/node": "^22.13.14",
     "typescript": "^5.8.2"

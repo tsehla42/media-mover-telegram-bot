@@ -20,4 +20,5 @@ bot.on("message:video", async (ctx) => {
   return messagesController.handleMessages(ctx, "video")
 })
 
+console.log("Bot is up and running")
 bot.start();
