@@ -3,6 +3,7 @@ import { InputMediaPhoto, InputMediaVideo } from "grammy/out/types.node";
 import { MY_ID, PHOTO_CHAT_ID, VIDEO_CHAT_ID } from "./config";
 import { EntityType, MediaEntity } from "./types";
 import { PhotoSize, Video } from "@grammyjs/types/message";
+import { sendErrorLog, sendTextMessage } from "./utils";
 
 export class MediaGroupController {
   private messagesIds: number[] = [];
@@ -23,17 +24,29 @@ export class MediaGroupController {
   }
 
   public async deleteMessages(ctx: Context) {
-    return ctx.api.deleteMessages(MY_ID, this.messagesIds);
+    try {
+      if (this.messagesIds.length) {
+        await ctx.api.deleteMessages(MY_ID, this.messagesIds);
+      }
+    } catch (e) {
+      await sendErrorLog(ctx, "Error while deleting messages", e);
+      this.resetGroupIds();
+    }
   }
 
   public async sendMediaGroup(ctx: Context) {
     const inputMediaPhotos = this.createMediaGroupFromIds(this.photoGroupIds, "photo") as InputMediaPhoto[];
     const inputMediaVideos = this.createMediaGroupFromIds(this.videoGroupIds, "video") as InputMediaVideo[];
-    if (!!this.photoGroupIds.length) {
-      await ctx.api.sendMediaGroup(PHOTO_CHAT_ID, inputMediaPhotos);
-    }
-    if (!!this.videoGroupIds.length) {
-      await ctx.api.sendMediaGroup(VIDEO_CHAT_ID, inputMediaVideos);
+    try {
+      if (!!this.photoGroupIds.length) {
+        await ctx.api.sendMediaGroup(PHOTO_CHAT_ID, inputMediaPhotos);
+      }
+      if (!!this.videoGroupIds.length) {
+        await ctx.api.sendMediaGroup(VIDEO_CHAT_ID, inputMediaVideos);
+      }
+    } catch (e) {
+      await sendErrorLog(ctx, `Error while sending media group`, e);
+      this.resetGroupIds();
     }
   }
 
