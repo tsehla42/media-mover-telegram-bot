@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "dotenv": "^16.4.7",
+    "env-var": "^7.5.0",
     "grammy": "^1.35.1"
   }
 }

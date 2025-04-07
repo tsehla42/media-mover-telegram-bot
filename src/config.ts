@@ -1,19 +1,11 @@
-import * as dotenv from "dotenv";
+import { config as loadEnv } from "dotenv";
+import env from "env-var";
 
-dotenv.config();
-
-const API_KEY = process.env.API_KEY;
-const MY_ID = Number(process.env.MY_ID);
-const PHOTO_CHAT_ID = Number(process.env.PHOTO_CHAT_ID);
-const VIDEO_CHAT_ID = Number(process.env.VIDEO_CHAT_ID);
-
-if (!API_KEY) {
-  throw new Error("Missing API_KEY in environment variables");
+if (process.env.NODE_ENV !== "production") {
+  loadEnv();
 }
 
-export {
-  API_KEY,
-  MY_ID,
-  PHOTO_CHAT_ID,
-  VIDEO_CHAT_ID,
-}
+export const API_KEY = env.get("API_KEY").required().asString();
+export const MY_ID = env.get("MY_ID").required().asIntPositive();
+export const PHOTO_CHAT_ID = env.get("PHOTO_CHAT_ID").required().asIntNegative();
+export const VIDEO_CHAT_ID = env.get("VIDEO_CHAT_ID").required().asIntNegative();
