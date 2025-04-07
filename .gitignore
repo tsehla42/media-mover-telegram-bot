@@ -14,3 +14,5 @@ node_modules
 json/*
 location-history.json
 kml/*
+
+/dist
