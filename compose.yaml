@@ -1,0 +1,12 @@
+# Docker Compose reference guide https://docs.docker.com/go/compose-spec-reference/
+
+services:
+  server:
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+    ports:
+      - 3000:3000
+    env_file:
+      - .env
