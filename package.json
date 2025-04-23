@@ -1,16 +1,16 @@
 {
   "scripts": {
     "compile": "npx tsc",
-    "bot": "node src/bot.js",
+    "bot": "node dist/bot.js",
     "dev": "npm run compile && npm run bot"
   },
   "devDependencies": {
-    "@types/node": "^22.13.14",
-    "typescript": "^5.8.2"
+    "@types/node": "22.14.1",
+    "typescript": "5.8.3"
   },
   "dependencies": {
-    "dotenv": "^16.4.7",
-    "env-var": "^7.5.0",
-    "grammy": "^1.35.1"
+    "dotenv": "16.5.0",
+    "env-var": "7.5.0",
+    "grammy": "1.36.1"
   }
 }
