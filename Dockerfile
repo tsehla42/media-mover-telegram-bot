@@ -13,10 +13,10 @@ WORKDIR /usr/src/app
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \
-    npm ci --omit=dev && \
-    cp package*.json . # Copy them into the image so later layers can access them
+    npm ci
 
 # Step 2: Copy the rest of the project and compile
+COPY package*.json ./
 COPY tsconfig.json ./
 COPY src ./src
 
@@ -33,13 +33,13 @@ WORKDIR /usr/src/app
 ENV NODE_ENV=production
 
 # Copy only what's needed for runtime
-COPY --from=build /app/package.json ./
-COPY --from=build /app/node_modules ./node_modules
-COPY --from=build /app/dist ./dist
+COPY --from=build /usr/src/app/package.json ./
+COPY --from=build /usr/src/app/node_modules ./node_modules
+COPY --from=build /usr/src/app/dist ./dist
 
 # Run the application as a non-root user.
 USER node
 # Expose the port that the application listens on.
-EXPOSE 3000
+EXPOSE 8080
 # Run the application.
 CMD ["npm", "run", "bot"]
