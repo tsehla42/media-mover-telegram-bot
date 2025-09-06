@@ -12,7 +12,7 @@ const extractMessagePropertiesFromContext = (ctx: Context, entityType: EntityTyp
 
 const sendTextMessage = async (ctx: Context, content: string) => {
   try {
-    await ctx.api.sendMessage(MY_ID, content);
+    return await ctx.api.sendMessage(MY_ID, content);
   } catch (e) {
     console.log("Fatal error. Cannot send text message.\n", e);
   }
@@ -20,7 +20,7 @@ const sendTextMessage = async (ctx: Context, content: string) => {
 
 const sendErrorLog = async (ctx: Context, reason: string, error: unknown) => {
   console.log(error);
-  await sendTextMessage(ctx, `${reason}:\n\n ${String(error) }`);
+  return await sendTextMessage(ctx, `${reason}:\n\n ${String(error) }`);
 }
 
 export {
