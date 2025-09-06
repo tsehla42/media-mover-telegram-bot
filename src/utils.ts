@@ -7,8 +7,8 @@ const extractMessagePropertiesFromContext = (ctx: Context, entityType: EntityTyp
     entity: ctx.message?.[entityType] as MediaEntity,
     messageId: ctx.message?.message_id as number,
     mediaGroupId: ctx.message?.media_group_id,
-  }
-}
+  };
+};
 
 const sendTextMessage = async (ctx: Context, content: string) => {
   try {
@@ -16,15 +16,19 @@ const sendTextMessage = async (ctx: Context, content: string) => {
   } catch (e) {
     console.log("Fatal error. Cannot send text message.\n", e);
   }
-}
+};
 
 const sendErrorLog = async (ctx: Context, reason: string, error: unknown) => {
   console.log(error);
-  return await sendTextMessage(ctx, `${reason}:\n\n ${String(error) }`);
-}
+  return await sendTextMessage(ctx, `${ reason }:\n\n ${ String(error) }`);
+};
+
+export const delay = (ms: number) => {
+  return new Promise<void>((resolve) => setTimeout(resolve, ms));
+};
 
 export {
   extractMessagePropertiesFromContext,
   sendTextMessage,
   sendErrorLog
-}
+};
