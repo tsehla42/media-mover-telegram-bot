@@ -2,7 +2,7 @@ import { Context } from "grammy";
 import { EntityType, MediaEntity } from "./types";
 import { MY_ID } from "./config";
 
-const extractMessagePropertiesFromContext = (ctx: Context, entityType: EntityType) => {
+export const extractMessagePropertiesFromContext = (ctx: Context, entityType: EntityType) => {
   return {
     entity: ctx.message?.[entityType] as MediaEntity,
     messageId: ctx.message?.message_id as number,
@@ -10,25 +10,19 @@ const extractMessagePropertiesFromContext = (ctx: Context, entityType: EntityTyp
   };
 };
 
-const sendTextMessage = async (ctx: Context, content: string) => {
+export const sendTextMessage = async (ctx: Context, content: string, options?: { parse_mode: "MarkdownV2" }) => {
   try {
-    return await ctx.api.sendMessage(MY_ID, content);
+    return await ctx.api.sendMessage(MY_ID, content, options);
   } catch (e) {
     console.log("Fatal error. Cannot send text message.\n", e);
   }
 };
 
-const sendErrorLog = async (ctx: Context, reason: string, error: unknown) => {
+export const sendErrorLog = async (ctx: Context, reason: string, error: unknown) => {
   console.log(error);
-  return await sendTextMessage(ctx, `${ reason }:\n\n ${ String(error) }`);
+  return await sendTextMessage(ctx, `${ reason }:\n\n \`\`\`${ String(error) }\`\`\``);
 };
 
 export const delay = (ms: number) => {
   return new Promise<void>((resolve) => setTimeout(resolve, ms));
-};
-
-export {
-  extractMessagePropertiesFromContext,
-  sendTextMessage,
-  sendErrorLog
 };
