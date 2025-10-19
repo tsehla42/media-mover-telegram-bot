@@ -1,11 +1,13 @@
 {
   "scripts": {
-    "compile": "npx tsc",
-    "bot": "node dist/bot.js",
-    "dev": "npm run compile && npm run bot"
+    "watch-compile": "tsc --watch",
+    "bot": "nodemon -w dist -x node dist/bot.js",
+    "dev": "concurrently npm:watch-compile npm:bot"
   },
   "devDependencies": {
     "@types/node": "22.14.1",
+    "concurrently": "^9.2.1",
+    "nodemon": "^3.1.10",
     "typescript": "5.9.2"
   },
   "dependencies": {
