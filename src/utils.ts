@@ -20,7 +20,9 @@ export const sendTextMessage = async (ctx: Context, content: string, options?: {
 
 export const sendErrorLog = async (ctx: Context, reason: string, error: unknown) => {
   console.log(error);
-  return await sendTextMessage(ctx, `${ reason }:\n\n \`\`\`${ String(error) }\`\`\``);
+  const ticks = "```";
+  const errorMessage = `${ticks}\n${ String(error) }\n${ticks}`
+  return await sendTextMessage(ctx, `${ reason }:\n\n ${errorMessage}`);
 };
 
 export const delay = (ms: number) => {
