@@ -30,6 +30,16 @@ bot.command("my_id", commandsController.getCurrentUserId);
 
 bot.command("chat_id", commandsController.getCurrentGroupChatId);
 
+bot.catch((errorContext) => {
+  console.error(`${ errorContext.name } timestamp: `, new Date().toLocaleString("uk-UA"));
+  console.log("errorContext.error", errorContext.error);
+  console.log("errorContext.message", errorContext.message);
+
+  if (errorContext.cause) {
+    console.log("Cause: ", errorContext.cause);
+  }
+});
+
 const startBot = async () => {
   await commandsController.setCommands();
   await bot.start();
