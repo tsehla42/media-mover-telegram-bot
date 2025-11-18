@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "compile": "npx tsc",
     "watch-compile": "tsc --watch",
     "bot": "nodemon -w dist -x node dist/bot.js",
     "dev": "concurrently npm:watch-compile npm:bot"

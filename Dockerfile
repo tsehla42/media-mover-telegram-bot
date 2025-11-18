@@ -1,10 +1,8 @@
 # syntax=docker/dockerfile:1
 
-# If you need more help, visit the Dockerfile reference guide at
-# https://docs.docker.com/go/dockerfile-reference/
-
 ARG NODE_VERSION=22.14.0
 
+########## Build Stage ##########
 FROM node:${NODE_VERSION}-alpine AS build
 
 WORKDIR /usr/src/app
@@ -19,15 +17,10 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 COPY package*.json ./
 COPY tsconfig.json ./
 COPY src ./src
-
-# Compile TypeScript to JS
 RUN npm run compile
 
-###
-### Runtime Stage
-###
+########## Runtime Stage ##########
 FROM node:${NODE_VERSION}-alpine
-
 WORKDIR /usr/src/app
 
 ENV NODE_ENV=production
@@ -37,9 +30,9 @@ COPY --from=build /usr/src/app/package.json ./
 COPY --from=build /usr/src/app/node_modules ./node_modules
 COPY --from=build /usr/src/app/dist ./dist
 
-# Run the application as a non-root user.
+# Run as non‑root user
 USER node
 # Expose the port that the application listens on.
 EXPOSE 8080
-# Run the application.
-CMD ["npm", "run", "bot"]
+
+CMD ["node","dist/bot.js"]
