@@ -1,12 +1,27 @@
+x-base: &base
+  image: media-mover-bot
+  environment:
+    NODE_ENV: production
+
 # Docker Compose reference guide https://docs.docker.com/go/compose-spec-reference/
 
 services:
-  server:
-    build:
-      context: .
-    environment:
-      NODE_ENV: production
-    ports:
-      - "3001:3000"
-    env_file:
-      - .env
+  bot-1:
+    <<: *base
+    ports: ["3001:3000"]
+    env_file: .env.1
+
+  bot-2:
+    <<: *base
+    ports: ["3002:3000"]
+    env_file: .env.2
+
+  bot-3:
+    <<: *base
+    ports: ["3003:3000"]
+    env_file: .env.3
+
+  bot-4:
+    <<: *base
+    ports: ["3004:3000"]
+    env_file: .env.4
