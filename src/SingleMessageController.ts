@@ -1,18 +1,21 @@
 import { Context } from "grammy";
-import { EntityType, MediaEntity } from "./types";
+import { EntityType, MediaEntity, SendMethodName } from "./types";
 import { MY_ID, PHOTO_CHAT_ID, VIDEO_CHAT_ID } from "./config";
 import { extractMessagePropertiesFromContext, sendErrorLog } from "./utils";
-import { PhotoSize, Video } from "@grammyjs/types/message";
+import { Animation, PhotoSize, Video } from "@grammyjs/types/message";
 import { Throttler } from "./Throttler";
 
 export class SingleMessageController {
   static readonly ChatIdEntityTypeMap = {
     photo: PHOTO_CHAT_ID,
     video: VIDEO_CHAT_ID,
+    animation: VIDEO_CHAT_ID,
   } as const;
+
   static readonly idGetters = {
     photo: (photo: PhotoSize[]) => photo[0].file_id,
     video: (video: Video) => video.file_id,
+    animation: (animation: Animation) => animation.file_id,
   } as const;
 
   private readonly throttler = new Throttler(2000);
@@ -35,11 +38,13 @@ export class SingleMessageController {
     const { api } = ctx;
     const chatId = SingleMessageController.ChatIdEntityTypeMap[entityType];
     const entityId = SingleMessageController.idGetters[entityType](entity);
-    const isPhoto = entityType === "photo";
-    const isVideo = entityType === "video";
+
+    const uppercasedEntityType = entityType[0].toUpperCase() + entityType.slice(1);
+    const sendAction = `send${uppercasedEntityType}` as SendMethodName<EntityType>;
+
     try {
       await this.throttler.throttle();
-      return isPhoto ? api.sendPhoto(chatId, entityId) : isVideo ? api.sendVideo(chatId, entityId) : undefined;
+      return api[sendAction](chatId, entityId);
     } catch (e) {
       await sendErrorLog(ctx, `Error while sending ${ entityType }`, e);
     }

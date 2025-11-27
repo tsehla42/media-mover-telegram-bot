@@ -1,9 +1,9 @@
 import { Context } from "grammy";
 import { InputMediaPhoto, InputMediaVideo } from "grammy/out/types.node";
 import { MY_ID, PHOTO_CHAT_ID, VIDEO_CHAT_ID } from "./config";
-import { EntityType, MediaEntity } from "./types";
+import { MediaEntity, MediaGroupEntityType } from "./types";
 import { PhotoSize, Video } from "@grammyjs/types/message";
-import { sendErrorLog, sendTextMessage } from "./utils";
+import { sendErrorLog, } from "./utils";
 
 export class MediaGroupController {
   private messagesIds: number[] = [];
@@ -50,7 +50,7 @@ export class MediaGroupController {
     }
   }
 
-  private createMediaGroupFromIds(groupIds: string[], entityType: EntityType) {
+  private createMediaGroupFromIds(groupIds: string[], entityType: MediaGroupEntityType) {
     const mediaGroup = [];
     for (let i = 0; i < groupIds.length && i < 10; i++) {
       mediaGroup.push({
@@ -61,19 +61,19 @@ export class MediaGroupController {
     return mediaGroup;
   }
 
-  public appendEntityIdToGroup(entity: MediaEntity, entityType: EntityType) {
+  public appendEntityIdToGroup(entity: MediaEntity, entityType: MediaGroupEntityType) {
     this[`${ entityType }IdSetter`](entity, entityType);
   }
 
-  private photoIdSetter(photo: PhotoSize[], entityType: EntityType) {
+  private photoIdSetter(photo: PhotoSize[], entityType: MediaGroupEntityType) {
     this.appendFileId(photo[0].file_id, entityType);
   }
 
-  private videoIdSetter(video: Video, entityType: EntityType) {
+  private videoIdSetter(video: Video, entityType: MediaGroupEntityType) {
     this.appendFileId(video.file_id, entityType);
   }
 
-  private appendFileId(fileId: string, entityType: EntityType) {
+  private appendFileId(fileId: string, entityType: MediaGroupEntityType) {
     this[`${ entityType }GroupIds`].push(fileId);
   }
 

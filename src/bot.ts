@@ -24,6 +24,10 @@ bot.on("message:video", async (ctx) => {
   return messagesController.handleMessages(ctx, "video");
 });
 
+bot.on("message:animation", async (ctx) => {
+  return messagesController.handleMessages(ctx, "animation");
+})
+
 bot.on("my_chat_member", groupChatNotificationController.onChatJoin);
 
 bot.command("my_id", commandsController.getCurrentUserId);

@@ -1,5 +1,5 @@
 import { Context } from "grammy";
-import { EntityType } from "./types";
+import { EntityType, MediaGroupEntityType } from "./types";
 import { MediaGroupController } from "./MediaGroupController";
 import { extractMessagePropertiesFromContext } from "./utils";
 import { SingleMessageController } from "./SingleMessageController";
@@ -29,7 +29,7 @@ export class MessagesController {
       clearTimeout(this.timer);
     }
 
-    this.mediaGroupController.appendEntityIdToGroup(entity, entityType);
+    this.mediaGroupController.appendEntityIdToGroup(entity, entityType as MediaGroupEntityType);
     this.mediaGroupController.appendMessageIdToGroup(messageId);
 
     this.timer = setTimeout(async () => {
