@@ -2,7 +2,7 @@
 set -euo pipefail
 
 IMAGE=media-mover-bot
-PROJECT=media-mover-bot
+PROJECT=media-mover
 
 docker build -t "$IMAGE" .
 

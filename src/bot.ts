@@ -1,9 +1,12 @@
 import { Bot } from "grammy";
+import { autoRetry } from "@grammyjs/auto-retry";
+import { run } from "@grammyjs/runner";
 import { API_KEY, MY_ID } from "./config";
 import { MessagesController } from "./MessagesController";
 import { CommandsController, GroupChatNotificationController } from "./controllers";
 
 const bot = new Bot(API_KEY as string);
+bot.api.config.use(autoRetry());
 
 const messagesController = new MessagesController();
 const commandsController = new CommandsController();
@@ -44,10 +47,15 @@ bot.catch((errorContext) => {
   }
 });
 
+const runner = run(bot);
+
+const stopRunner = () => runner.isRunning() && runner.stop();
+process.once("SIGINT", stopRunner);
+process.once("SIGTERM", stopRunner);
+
 const startBot = async () => {
   await commandsController.setCommands();
-  await bot.start();
+  console.log("Bot is up and running");
 };
 
-console.log("Bot is up and running");
-startBot();
+startBot().catch(console.error);

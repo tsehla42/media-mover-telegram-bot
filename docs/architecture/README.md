@@ -8,11 +8,14 @@ Detailed module responsibilities and data flow.
 
 Entry point for the Telegram bot. Responsibilities:
 - Initializes the grammY Bot instance
+- Configures `@grammyjs/auto-retry` for automatic rate limit and server error handling
+- Uses `@grammyjs/runner` for concurrent update processing
 - Registers message handlers for `photo`, `video`, and `animation`
 - Enforces user ID check (only `MY_ID` can use the bot)
 - Registers command handlers (`/my_id`, `/chat_id`)
 - Handles chat join notifications
 - Sets up global error handler
+- Handles graceful shutdown (SIGINT/SIGTERM)
 
 ### config.ts
 
@@ -36,7 +39,6 @@ Central message router. Responsibilities:
 Handles individual media messages. Responsibilities:
 - Sends photos to `PHOTO_CHAT_ID`
 - Sends videos/animations to `VIDEO_CHAT_ID`
-- Uses `Throttler` to prevent rate limiting
 - Deletes original message after forwarding
 
 ### MediaGroupController.ts
@@ -46,10 +48,6 @@ Handles media groups (albums). Responsibilities:
 - Separates photos from videos in mixed groups
 - Sends grouped media as Telegram albums
 - Waits for debounce timeout before sending
-
-### Throttler.ts
-
-Rate limiting utility. Prevents Telegram API rate limit violations by enforcing minimum delay between requests.
 
 ### CommandsController.ts
 
@@ -79,7 +77,6 @@ Utility functions:
 - `extractMessagePropertiesFromContext()` - Extracts media, message ID, and group ID
 - `sendTextMessage()` - Sends text message to user
 - `sendErrorLog()` - Formats and sends error details
-- `delay()` - Promise-based setTimeout wrapper
 
 ## Data Flow
 

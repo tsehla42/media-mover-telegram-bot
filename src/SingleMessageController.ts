@@ -3,7 +3,6 @@ import { EntityType, MediaEntity, SendMethodName } from "./types";
 import { MY_ID, PHOTO_CHAT_ID, VIDEO_CHAT_ID } from "./config";
 import { extractMessagePropertiesFromContext, sendErrorLog } from "./utils";
 import { Animation, PhotoSize, Video } from "@grammyjs/types/message";
-import { Throttler } from "./Throttler";
 
 export class SingleMessageController {
   static readonly ChatIdEntityTypeMap = {
@@ -17,8 +16,6 @@ export class SingleMessageController {
     video: (video: Video) => video.file_id,
     animation: (animation: Animation) => animation.file_id,
   } as const;
-
-  private readonly throttler = new Throttler(2000);
 
   public async processSingleMessage(ctx: Context, entityType: EntityType) {
     const { entity, messageId } = extractMessagePropertiesFromContext(ctx, entityType);
@@ -43,7 +40,6 @@ export class SingleMessageController {
     const sendAction = `send${uppercasedEntityType}` as SendMethodName<EntityType>;
 
     try {
-      await this.throttler.throttle();
       return api[sendAction](chatId, entityId);
     } catch (e) {
       await sendErrorLog(ctx, `Error while sending ${ entityType }`, e);

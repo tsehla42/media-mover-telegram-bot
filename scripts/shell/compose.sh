@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PROJECT=media-mover-bot
+PROJECT=media-mover
 
 elapsed() {
   awk "BEGIN {printf \"%.1fs\", $1 / 1000000000}"

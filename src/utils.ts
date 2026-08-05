@@ -24,7 +24,3 @@ export const sendErrorLog = async (ctx: Context, reason: string, error: unknown)
   const errorMessage = `${ticks}\n${ String(error) }\n${ticks}`
   return await sendTextMessage(ctx, `${ reason }:\n\n ${errorMessage}`);
 };
-
-export const delay = (ms: number) => {
-  return new Promise<void>((resolve) => setTimeout(resolve, ms));
-};

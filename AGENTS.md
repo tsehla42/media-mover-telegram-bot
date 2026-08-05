@@ -13,11 +13,15 @@ A Telegram bot that automatically separates photos and videos into dedicated cha
 │   ├── MessagesController.ts           # Routes messages to appropriate handler
 │   ├── SingleMessageController.ts      # Handles individual media messages
 │   ├── MediaGroupController.ts         # Handles grouped media (albums)
-│   ├── Throttler.ts                    # Rate limiting for API calls
 │   └── controllers/
 │       ├── index.ts                    # Controller exports
 │       ├── CommandsController.ts       # /my_id and /chat_id commands
 │       └── GroupChatNotificationController.ts  # Chat join notifications
+├── dist/                               # Compiled JS output
+├── compose.yaml                        # Docker Compose for multi-bot setup
+├── scripts/shell/                      # Shell scripts (compose, deploy, update)
+├── Dockerfile                          # Container build definition
+└── docs/                               # Documentation
 ├── dist/                               # Compiled JS output
 ├── compose.yaml                        # Docker Compose for multi-bot setup
 ├── compose.sh                          # Helper script for compose
@@ -29,14 +33,13 @@ A Telegram bot that automatically separates photos and videos into dedicated cha
 
 | Module | Responsibility |
 |--------|----------------|
-| `bot.ts` | Initializes bot, registers message/command handlers, enforces user ID check |
+| `bot.ts` | Initializes bot, registers message/command handlers, enforces user ID check, configures auto-retry, runs concurrent updates |
 | `config.ts` | Loads and validates environment variables (API_KEY, MY_ID, chat IDs) |
 | `types.ts` | Type definitions for entities and send methods |
-| `utils.ts` | Message extraction, error logging, delay utility |
+| `utils.ts` | Message extraction, error logging |
 | `MessagesController.ts` | Routes incoming messages to single or group handlers based on `media_group_id` |
 | `SingleMessageController.ts` | Sends individual photos/videos/animations to their destination chats |
 | `MediaGroupController.ts` | Collects and sends grouped media (albums), separating photos from videos |
-| `Throttler.ts` | Prevents Telegram API rate limit violations |
 | `CommandsController.ts` | Handles `/my_id` and `/chat_id` commands |
 | `GroupChatNotificationController.ts` | Logs and notifies when bot is added/removed from chats |
 
