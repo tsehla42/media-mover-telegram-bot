@@ -23,3 +23,8 @@ docs/*
 !docs/architecture/
 !docs/configuration/
 !docs/guides/
+
+deploy.sh
+
+# Logs
+/logs/

@@ -66,4 +66,5 @@ See `docs/configuration/` for environment variables and setup.
 
 - **Run locally**: `npm run dev` (compiles TS and starts bot)
 - **Build**: `npm run compile`
-- **Deploy with compose**: `./compose.sh`
+- **Deploy to opi3b**: `./bot.sh deploy` (always use this for production deploys)
+- **Compose locally**: `./bot.sh compose` (build and start Docker containers)

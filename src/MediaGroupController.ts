@@ -1,9 +1,8 @@
-import { Context } from "grammy";
-import { InputMediaPhoto, InputMediaVideo } from "grammy/out/types.node";
+import { Context, InputMediaBuilder } from "grammy";
 import { MY_ID, PHOTO_CHAT_ID, VIDEO_CHAT_ID } from "./config";
 import { MediaEntity, MediaGroupEntityType } from "./types";
 import { PhotoSize, Video } from "@grammyjs/types/message";
-import { sendErrorLog, } from "./utils";
+import { sendErrorLog } from "./utils";
 
 export class MediaGroupController {
   private messagesIds: number[] = [];
@@ -35,13 +34,13 @@ export class MediaGroupController {
   }
 
   public async sendMediaGroup(ctx: Context) {
-    const inputMediaPhotos = this.createMediaGroupFromIds(this.photoGroupIds, "photo") as InputMediaPhoto[];
-    const inputMediaVideos = this.createMediaGroupFromIds(this.videoGroupIds, "video") as InputMediaVideo[];
+    const inputMediaPhotos = this.createMediaGroupFromIds(this.photoGroupIds, "photo");
+    const inputMediaVideos = this.createMediaGroupFromIds(this.videoGroupIds, "video");
     try {
-      if (!!this.photoGroupIds.length) {
+      if (this.photoGroupIds.length) {
         await ctx.api.sendMediaGroup(PHOTO_CHAT_ID, inputMediaPhotos);
       }
-      if (!!this.videoGroupIds.length) {
+      if (this.videoGroupIds.length) {
         await ctx.api.sendMediaGroup(VIDEO_CHAT_ID, inputMediaVideos);
       }
     } catch (e) {
@@ -51,30 +50,20 @@ export class MediaGroupController {
   }
 
   private createMediaGroupFromIds(groupIds: string[], entityType: MediaGroupEntityType) {
-    const mediaGroup = [];
-    for (let i = 0; i < groupIds.length && i < 10; i++) {
-      mediaGroup.push({
-        type: entityType,
-        media: groupIds[i]
-      });
-    }
-    return mediaGroup;
+    const builder = entityType === 'photo' ? InputMediaBuilder.photo : InputMediaBuilder.video;
+    return groupIds.slice(0, 10).map(fileId => builder(fileId));
   }
 
   public appendEntityIdToGroup(entity: MediaEntity, entityType: MediaGroupEntityType) {
-    this[`${ entityType }IdSetter`](entity, entityType);
-  }
-
-  private photoIdSetter(photo: PhotoSize[], entityType: MediaGroupEntityType) {
-    this.appendFileId(photo[0].file_id, entityType);
-  }
-
-  private videoIdSetter(video: Video, entityType: MediaGroupEntityType) {
-    this.appendFileId(video.file_id, entityType);
-  }
-
-  private appendFileId(fileId: string, entityType: MediaGroupEntityType) {
-    this[`${ entityType }GroupIds`].push(fileId);
+    const fileId = entityType === 'photo' 
+      ? (entity as PhotoSize[])[0].file_id 
+      : (entity as Video).file_id;
+    
+    if (entityType === 'photo') {
+      this.photoGroupIds.push(fileId);
+    } else {
+      this.videoGroupIds.push(fileId);
+    }
   }
 
   public appendMessageIdToGroup(messageId: number) {
