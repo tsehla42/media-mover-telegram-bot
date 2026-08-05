@@ -16,3 +16,10 @@ location-history.json
 kml/*
 
 /dist
+
+# Docs
+docs/*
+!docs/README.md
+!docs/architecture/
+!docs/configuration/
+!docs/guides/
