@@ -4,22 +4,30 @@ x-base: &base
   restart: unless-stopped
   environment:
     NODE_ENV: production
+  deploy:
+    resources:
+      limits:
+        memory: 36M
 
 # Docker Compose reference guide https://docs.docker.com/go/compose-spec-reference/
 
 services:
   bot-1:
     <<: *base
+    container_name: media-mover-bot-1
     env_file: .env.1
 
   bot-2:
     <<: *base
+    container_name: media-mover-bot-2
     env_file: .env.2
 
   bot-3:
     <<: *base
+    container_name: media-mover-bot-3
     env_file: .env.3
 
   bot-4:
     <<: *base
+    container_name: media-mover-bot-4
     env_file: .env.4

@@ -1,4 +1,7 @@
 {
+  "name": "media-mover-telegram-bot",
+  "version": "1.0.0",
+  "private": true,
   "scripts": {
     "compile": "npx tsc",
     "watch-compile": "tsc --watch",
@@ -8,9 +11,9 @@
   },
   "devDependencies": {
     "@types/node": "22.14.1",
-    "concurrently": "^9.2.1",
-    "nodemon": "^3.1.11",
-    "typescript": "5.9.3"
+    "concurrently": "10.0.5",
+    "nodemon": "3.1.14",
+    "typescript": "6.0.3"
   },
   "dependencies": {
     "@grammyjs/auto-retry": "2.0.2",

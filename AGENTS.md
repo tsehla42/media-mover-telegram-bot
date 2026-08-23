@@ -71,3 +71,15 @@ See `docs/configuration/` for environment variables and setup.
 - **Build**: `npm run compile`
 - **Deploy to opi3b**: `./bot.sh deploy` (always use this for production deploys)
 - **Compose locally**: `./bot.sh compose` (build and start Docker containers)
+
+## Deploy Workflow
+
+**Always commit and push changes before deploying.** The deploy builds the Docker image from the current git state on opi3b. If you deploy without pushing, the container will restart with old code.
+
+```
+# 1. Commit and push
+git add -A && git commit -m "..." && git push
+
+# 2. Then deploy
+./bot.sh deploy
+```
