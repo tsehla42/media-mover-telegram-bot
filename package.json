@@ -1,25 +1,27 @@
 {
   "name": "media-mover-telegram-bot",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
     "compile": "npx tsc",
     "watch-compile": "tsc --watch",
     "bot": "nodemon -w dist -x node dist/bot.js",
     "dev": "concurrently npm:watch-compile npm:bot",
+    "test": "vitest run",
     "compose": "compose.sh"
   },
   "devDependencies": {
-    "@types/node": "22.14.1",
-    "concurrently": "10.0.5",
+    "@types/node": "22.20.5",
+    "concurrently": "10.0.6",
     "nodemon": "3.1.14",
-    "typescript": "6.0.3"
+    "typescript": "7.0.2",
+    "vitest": "5.0.5"
   },
   "dependencies": {
     "@grammyjs/auto-retry": "2.0.2",
     "@grammyjs/runner": "2.0.3",
-    "dotenv": "17.2.3",
+    "dotenv": "18.0.8",
     "env-var": "7.5.0",
-    "grammy": "1.38.4"
+    "grammy": "1.46.0"
   }
 }

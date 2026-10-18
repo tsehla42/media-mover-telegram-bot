@@ -19,7 +19,12 @@ export class SingleMessageController {
 
   public async processSingleMessage(ctx: Context, entityType: EntityType) {
     const { entity, messageId } = extractMessagePropertiesFromContext(ctx, entityType);
-    await this.sendSingleMessage(ctx, entity, entityType);
+    const isSent = await this.sendSingleMessage(ctx, entity, entityType);
+
+    if (!isSent) {
+      return;
+    }
+
     await this.deleteMessage(ctx, messageId);
   }
 
@@ -40,7 +45,7 @@ export class SingleMessageController {
     const sendAction = `send${uppercasedEntityType}` as SendMethodName<EntityType>;
 
     try {
-      return api[sendAction](chatId, entityId);
+      return await api[sendAction](chatId, entityId);
     } catch (e) {
       await sendErrorLog(ctx, `Error while sending ${ entityType }`, e);
     }

@@ -3,7 +3,7 @@ import { autoRetry } from "@grammyjs/auto-retry";
 import { run } from "@grammyjs/runner";
 import { API_KEY, MY_ID } from "./config";
 import { MessagesController } from "./MessagesController";
-import { CommandsController, GroupChatNotificationController } from "./controllers";
+import { CommandsController, GroupChatNotificationController, TextMessageController } from "./controllers";
 
 const bot = new Bot(API_KEY as string);
 bot.api.config.use(autoRetry());
@@ -11,6 +11,7 @@ bot.api.config.use(autoRetry());
 const messagesController = new MessagesController();
 const commandsController = new CommandsController();
 const groupChatNotificationController = new GroupChatNotificationController();
+const textMessageController = new TextMessageController();
 
 bot.on("message", async (ctx, next) => {
   const isAllowedUser = ctx.from.id === MY_ID;
@@ -30,6 +31,10 @@ bot.on("message:video", async (ctx) => {
 bot.on("message:animation", async (ctx) => {
   return messagesController.handleMessages(ctx, "animation");
 })
+
+bot.on("message:text", async (ctx) => {
+  return textMessageController.handleTextMessage(ctx);
+});
 
 bot.on("my_chat_member", groupChatNotificationController.onChatJoin);
 
